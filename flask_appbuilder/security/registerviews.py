@@ -97,6 +97,15 @@ class BaseRegisterUser(PublicFormView):
 
         :rtype : RegisterUser
         """
+
+        # If email address not in fitered domains, don't register
+        if len(self.appbuilder.sm.allowed_email_domains) > 0:
+            email_domain = email.split('@')[-1]
+            if email_domain not in self.appbuilder.sm.allowed_email_domains:
+                log.error("Email {0} not in registered domain list: {1}".format(email, ",".join(self.appbuilder.sm.allowed_email_domains)))
+                flash(as_unicode(self.error_message), 'danger')
+                return None
+
         register_user = self.appbuilder.sm.add_register_user(username, first_name, last_name, email, password)
         if register_user:
             if self.send_email(register_user):

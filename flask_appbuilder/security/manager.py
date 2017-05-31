@@ -166,6 +166,7 @@ class BaseSecurityManager(AbstractSecurityManager):
         app.config.setdefault('AUTH_ROLE_ADMIN', 'Admin')
         app.config.setdefault('AUTH_ROLE_PUBLIC', 'Public')
         app.config.setdefault('AUTH_TYPE', AUTH_DB)
+        app.config.setdefault('ALLOWED_EMAIL_DOMAINS',[])
         # Self Registration
         app.config.setdefault('AUTH_USER_REGISTRATION', False)
         app.config.setdefault('AUTH_USER_REGISTRATION_ROLE', self.auth_role_public)
@@ -287,6 +288,10 @@ class BaseSecurityManager(AbstractSecurityManager):
     @property
     def oauth_providers(self):
         return self.appbuilder.get_app.config['OAUTH_PROVIDERS']
+
+    @property
+    def allowed_email_domains(self):
+        return self.appbuilder.get_app.config['ALLOWED_EMAIL_DOMAINS']
 
     def oauth_user_info_getter(self, f):
         """
